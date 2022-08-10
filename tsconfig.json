@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        "target": "es2017",
+        "module": "commonjs",
+        "moduleResolution": "node",
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "noImplicitAny": false,
+        "preserveConstEnums": true,
+        "suppressImplicitAnyIndexErrors": false,
+        "noResolve": false,
+        "noUnusedParameters": false,
+        "noUnusedLocals": false,
+        //"strictNullChecks": true,
+        "resolveJsonModule": true
+    }
+}
