@@ -1,25 +1,43 @@
-import * as countrys from "../city.json";
-import { CountryPort } from "./Contry.port";
-import { City } from "./Country.entity";
+import { CountryPort, GetCityByCountryParams, GetCityByNameParams, Response } from "./Contry.port";
+import { City, CountryCitys, CountryCode } from "./Country.entity";
 
-export class JSONCountryAdapter implements CountryPort{
-    constructor(){}
+type CitysJsonFile = CountryCitys[];
+
+export class JSONCountryAdapter implements CountryPort {
+    constructor(
+        private readonly _citysFile:CitysJsonFile
+    ){}
 
     async getAllCity(){
       let citys = [];
-      countrys.map( country => citys.push(country.city.items) );
+      for(let i = 0; i < this._citysFile.length; i++){
+        citys = citys.concat(this._citysFile[i].items);
+      }
       return citys;
     }
 
-    async getCityByCountry(countryName:string){
-        const country = countrys.find( objContry => objContry.title.toLowerCase() === countryName.toLowerCase());
-        return country.city.items;
+    async getCityByCountry(param:GetCityByCountryParams){
+        const country = this._citysFile.find( objContry => objContry.title.toLowerCase() === param.countryName.toLowerCase());
+        return country.items;
     }
 
-    async getCityByName(cityName:string){
-      let citys:City[] = [];
-      countrys.map( country => citys.concat(country.city.items) );
-      const city = citys.find( objCity => objCity.title.toLowerCase() === cityName.toLowerCase() );
+    async getCityByName(param:GetCityByNameParams){
+      const country = this._citysFile.find((country)=> country.id === param.country_id);
+      const city = country.items.find( objCity => objCity.title.toLowerCase() === param.name.toLowerCase() );
       return city;
+    }
+
+    
+    async getCountryByCode(param){
+      const country = this._citysFile.find( objContry => objContry.code === param.code);
+        return country;
+    }
+
+    async getAllCountry(param){
+        return this._citysFile;
+    }
+
+    async getAllCityByCountry(param: { country_id: number; }): Promise<Response<City> | City[]> {
+      return this._citysFile.find( country => country.id === param.country_id).items
     }
 }

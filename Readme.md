@@ -1,4 +1,3 @@
-Добавить сервисный слой
-Добавить подгрузку городов в json
-Добавить сервер
-Доработать cli
+groupRepository
+Добавить getGroupFromCountry
+Добавить getGroupFromCity

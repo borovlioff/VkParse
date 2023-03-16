@@ -1,22 +1,37 @@
 import { chunk } from 'lodash';
 import { VK } from 'vk-io';
 import { GroupsSearchParams } from 'vk-io/lib/api/schemas/params';
+import { Country } from '../country/Country.entity';
+
+export interface GetGroupFromCountryParam{
+    country_id:number,
+    country: Country
+}
 
 export class GroupsRepository{
     vk:VK;
-    constructor(private readonly _token){
+    constructor(private readonly _token:string
+        
+        ){
         this.vk = new VK({
             token: _token
         });
     }
     
-    async getAll(option:GroupsSearchParams){
+    async getGroup(option:GroupsSearchParams){
+    try {
         const groups = await this.vk.api.groups.search({
             ...option,
             count: 1000
         });
         return groups.items;
+    } catch (error) {
+        console.warn(error);
+        return new Error(error)
     }
+        
+    }
+
 
     async getAdmins(groups: number[]) {
         const groupIdsChunk = chunk(groups, 500);
@@ -51,5 +66,13 @@ export class GroupsRepository{
             admins_id.push(...getAdminId(adminsAll[i]));
         }    
         return admins_id;
+        }
+
+        async getGroupFromCountry(param:GetGroupFromCountryParam){
+            try {
+              
+            } catch (error) {
+                console.warn(error)
+            }
         }
 }
