@@ -1,5 +1,7 @@
 /.env
+/citys.json
 /admins.txt
 /build
 /groups.txt
+/groups.csv
 /node_modules

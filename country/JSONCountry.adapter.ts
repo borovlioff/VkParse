@@ -1,5 +1,5 @@
-import { CountryPort, GetCityByCountryParams, GetCityByNameParams, Response } from "./Contry.port";
-import { City, CountryCitys, CountryCode } from "./Country.entity";
+import { CountryPort, GetCityByCountryParams, GetCityByNameParams } from "./Contry.port";
+import { CountryCitys } from "./Country.entity";
 
 type CitysJsonFile = CountryCitys[];
 
@@ -37,7 +37,7 @@ export class JSONCountryAdapter implements CountryPort {
         return this._citysFile;
     }
 
-    async getAllCityByCountry(param: { country_id: number; }): Promise<Response<City> | City[]> {
+    async getAllCityByCountry(param) {
       return this._citysFile.find( country => country.id === param.country_id).items
     }
 }

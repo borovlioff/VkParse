@@ -27,7 +27,7 @@ export interface GetCountryByCodeParams{
 }
 
 export interface GetAllCountryParams{
-    code:CountryCode[]
+    code:Country[]
 }
 
 export type GetCityByNameParams = {name: string, country_id:number}
@@ -43,11 +43,11 @@ export interface CountryPort{
 
     getAllCity(param:GetAllCityParams):Promise<CountryCitys[]>
 
-    getCityByCountry(param:GetCityByCountryParams):Promise<Response<City>|City[]>
+    getCityByCountry(param:GetCityByCountryParams):Promise<City[]>
 
-    getAllCityByCountry(param:GetAllCityByCountryParams):Promise<Response<City>|City[]>
+    getAllCityByCountry(param:GetAllCityByCountryParams):Promise<City[]>
     
-    getCountryByCode(param:GetCountryByCodeParams):Promise<Response<Country>|Country>
+    getCountryByCode(param:GetCountryByCodeParams):Promise<Country>
 
     getAllCountry(param:GetAllCountryParams):Promise<Country[]>
 }

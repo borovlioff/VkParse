@@ -1,6 +1,6 @@
 import { VK } from "vk-io";
 import { sleep } from "../util/sleep";
-import { CountryPort, GetAllCityByCountryParams, GetAllCityParams, GetCityByCountryParams, GetCityByNameParams } from "./Contry.port";
+import { CountryPort, GetAllCityByCountryParams, GetAllCityParams, GetAllCountryParams, GetCityByCountryParams, GetCityByNameParams, GetCountryByCodeParams } from "./Contry.port";
 import { City, Country, CountryCitys, CountryCode } from "./Country.entity";
 import { CityDTO, CountryDTO } from "./country.mapper";
 
@@ -12,29 +12,27 @@ export class VKApiAdapter implements CountryPort {
         });
     }
 
-    async getCountryByCode(param) {
+    async getCountryByCode(params:GetCountryByCodeParams) {
         try {
             const res = await this.vk.api.database.getCountries({
-                code: param.code
+                code: params.code
             });
-            return {
-                count: res.count,
-                items: res.items.map(CountryDTO)
-            };
+            return  res.items.map(CountryDTO)[0]
+            
         } catch (error) {
             console.warn(error);
         }
     }
 
-    async getAllCountry(param) {
+    async getAllCountry(params:GetAllCountryParams) {
         try {
             const counrtysData = [];
-            for (const country of param.countrys) {
-                const res = await this.getCountryByCode(country.code);
-                if (res.items[0].id !== 0) {
+            for (const country of params.code) {
+                const res = await this.getCountryByCode(country);
+                if (res.id !== 0) {
                     counrtysData.push({
                         ...country,
-                        id: res.items[0].id
+                        id: res.id
                     })
                 }
             }
@@ -75,10 +73,7 @@ export class VKApiAdapter implements CountryPort {
                 ...param
             });
             console.log(`Count city:${citys.count}`);
-            return {
-                count: citys.count,
-                items: citys.items.map(CityDTO)
-            }
+            return citys.items.map(CityDTO);
         } catch (error) {
             console.warn(error);
         }
@@ -100,10 +95,8 @@ export class VKApiAdapter implements CountryPort {
             });
             console.log("Count city:",firstReq.count)
             if (firstReq.count <= 100) {
-                return {
-                    count: firstReq.count,
-                    items: citys.map(CityDTO)
-                }
+                return citys.map(CityDTO)
+                
             } else {
                 citys.push(...firstReq.items);
                 count = firstReq.count;
@@ -125,10 +118,8 @@ export class VKApiAdapter implements CountryPort {
                         curentIndex += step;
                     }, 3000);
                 }
-                return {
-                    count: count,
-                    items: citys.map(CityDTO)
-                }
+                return  citys.map(CityDTO)
+                
             }
 
         } catch (error) {
